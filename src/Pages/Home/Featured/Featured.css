@@ -1,0 +1,4 @@
+.featuredItem{
+    background-image: linear-gradient(90deg, rgb(24, 24, 34) 0%, rgba(49, 49, 59, 0) 100%, rgba(0,212,255,1) 100%),url('../../../assets/home/featured.jpg');
+    background-position: center;
+}
