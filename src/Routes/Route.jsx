@@ -70,7 +70,8 @@ import UpdateItem from "../Pages/DashBoard/UpdateItem/UpdateItem";
         {
           path: 'updateItem/:id',
           element: <AdminRoute><UpdateItem></UpdateItem></AdminRoute>,
-          loader: ({params}) => fetch(`http://localhost:5000/menu/${params.id}`)
+          loader: ({params}) => fetch(`https://bistro-boss-server-gold-rho.vercel.app
+/menu/${params.id}`)
         },
         {
           path: 'allusers',

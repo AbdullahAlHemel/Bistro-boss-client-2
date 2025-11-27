@@ -1,66 +1,113 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../../Providers/AuthProvider";
 import { BsCartFill } from "react-icons/bs";
+import { AuthContext } from "../../Providers/AuthProvider";
 import UseCart from "../../Hooks/UseCart";
+
 const Navbar = () => {
-  const { user , logOut} = useContext(AuthContext);
+  const { user, logOut } = useContext(AuthContext);
   const [cart] = UseCart();
 
-    const  handleLogOut =  () => {
-          logOut()
-          .then(() => {})
-          .catch(error =>  console.log(error))
+  const handleLogOut = async () => {
+    try {
+      await logOut();
+    } catch (error) {
+      console.error(error);
     }
+  };
 
-    const navOptions = <>
-        <li><Link to='/'>Home</Link></li>
-        <li><Link to='/menu'>Our Menu</Link></li>
-        <li><Link to='/order/salad'>Order</Link></li>
-        <li><Link to='/secret'>Secret</Link></li>
+  const navOptions = (
+    <>
+      <li>
+        <Link to="/" className="transition-colors hover:text-red-500">
+          Home
+        </Link>
+      </li>
+      <li>
+        <Link to="/menu" className="transition-colors hover:text-red-500">
+          Our Menu
+        </Link>
+      </li>
+      <li>
+        <Link to="/order/salad" className="transition-colors hover:text-red-500">
+          Order
+        </Link>
+      </li>
+      <li>
+        <Link to="/secret" className="transition-colors hover:text-red-500">
+          Secret
+        </Link>
+      </li>
+      <li>
+        <Link to="/dashboard/cart" className="relative flex items-center transition-colors hover:text-red-500">
+          <BsCartFill className="text-2xl" />
+          {cart.length > 0 && (
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-1 rounded-full">
+              +{cart.length}
+            </span>
+          )}
+        </Link>
+      </li>
+      {user ? (
         <li>
-          <Link to='/dashboard/cart'>
-          <button className="flex">
-          <BsCartFill className="text-[25px] " />
-              <div className="badge badge-secondary ml-[-10px] mt-[-5px] font-bold">+{cart.length}</div>
-         </button>
+          <button
+            onClick={handleLogOut}
+            className="transition-colors hover:text-red-500 font-semibold"
+          >
+            LogOut
+          </button>
+        </li>
+      ) : (
+        <li>
+          <Link to="/login" className="transition-colors hover:text-red-500 font-semibold">
+            LogIn
           </Link>
         </li>
-        {
-          user ? <>
-          {/* <span>{user?.displayName}</span> */}
-             <li><Link onClick={handleLogOut} className="">LogOut</Link></li>
-          </>: 
-          <> 
-            <li><Link to='/login'>LogIn</Link></li>
-          </>
-        }
+      )}
     </>
-    return (
-        <>
-  <div className="navbar fixed z-10 max-w-6xl m-auto bg-opacity-30 bg-black text-white">
-  <div className="navbar-start">
-    <div className="dropdown">
-      <label tabIndex={0} className="btn btn-ghost lg:hidden">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
-      </label>
-      <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-        {navOptions}
-      </ul>
-    </div>
-    <a className="btn btn-ghost text-xl">Bistro Boss</a>
-  </div>
-  <div className="navbar-center hidden lg:flex">
-    <ul className="menu menu-horizontal px-1">
-     {navOptions}
-    </ul>
-  </div>
-  <div className="navbar-end">
-    <a className="btn">Button</a>
-  </div>
-</div>
-        </>
-    );
+  );
+
+  return (
+    <nav className="navbar max-w-6xlrou fixed z-10 w-full bg-black bg-opacity-40 backdrop-blur-md text-white shadow-md">
+      <div className="navbar-start px-4">
+        <div className="dropdown">
+          <label tabIndex={0} className="btn btn-ghost lg:hidden">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
+            </svg>
+          </label>
+          <ul
+            tabIndex={0}
+            className="menu menu-sm dropdown-content mt-3 p-2 shadow-lg bg-black bg-opacity-80 rounded-lg w-52"
+          >
+            {navOptions}
+          </ul>
+        </div>
+        <Link to="/" className="btn btn-ghost text-2xl font-bold text-red-500 hover:text-white">
+          Bistro Boss
+        </Link>
+      </div>
+
+      <div className="navbar-center hidden lg:flex px-4">
+        <ul className="menu menu-horizontal px-1 space-x-4">{navOptions}</ul>
+      </div>
+
+      <div className="navbar-end px-4">
+        <Link
+          to="/contact"
+          className="btn bg-red-500 hover:bg-red-600 text-white transition-colors font-semibold"
+        >
+          Contact
+        </Link>
+      </div>
+    </nav>
+  );
 };
 
 export default Navbar;

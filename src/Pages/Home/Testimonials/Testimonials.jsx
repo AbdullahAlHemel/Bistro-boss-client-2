@@ -1,43 +1,56 @@
-import SectionTitle from "../../../Components/SectionTitle/SectionTitle";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import { Navigation } from 'swiper/modules';
 import { useEffect, useState } from "react";
-import { Rating } from '@smastrom/react-rating'
-import '@smastrom/react-rating/style.css'
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import { Rating } from "@smastrom/react-rating";
+
+import "swiper/css";
+import "swiper/css/navigation";
+import "@smastrom/react-rating/style.css";
+
+import SectionTitle from "../../../Components/SectionTitle/SectionTitle";
+
 const Testimonials = () => {
-    const [reviews, setReviews] = useState([]);
-    useEffect(()=> {
-        fetch(`http://localhost:5000/reviews`)
-        .then(res => res.json())
-        .then(data => setReviews(data))
-    },[])
-    return (
-        <section className="my-20">
-            <SectionTitle heading={'What Our Client Say'} subHeading={'Testimonials'}></SectionTitle>
-            <>
-      <Swiper navigation={true} modules={[Navigation]} className="mySwiper">
-        {
-             reviews.map(review => <SwiperSlide
-             key={review._id}
-             >
-                <div className="m-14 px-6">
-                <Rating
-                    style={{ maxWidth: 180, marginBottom:'15px', margin:'auto' }}
-                    value={review.rating}
-                    readOnly
-                    />
-                    <p className="text-center mb-4">{review.details}</p>
-                    <h3 className="text-center text-2xl text-orange-500">{review.name}</h3>
-                </div>
-             </SwiperSlide>
-             )
-        }
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    fetch("https://bistro-boss-server-gold-rho.vercel.app/reviews")
+      .then((res) => res.json())
+      .then((data) => setReviews(data))
+      .catch((err) => console.error(err));
+  }, []);
+
+  return (
+    <section className="my-20">
+      <SectionTitle heading="What Our Clients Say" subHeading="Testimonials" />
+
+      <Swiper
+        navigation
+        modules={[Navigation]}
+        className="mySwiper"
+        spaceBetween={30}
+        slidesPerView={1}
+        breakpoints={{
+          640: { slidesPerView: 1 },
+          768: { slidesPerView: 2 },
+          1024: { slidesPerView: 3 },
+        }}
+      >
+        {reviews.map((review) => (
+          <SwiperSlide key={review._id}>
+            <div className="bg-white shadow-lg rounded-xl p-8 m-6 flex flex-col items-center text-center transition-transform hover:scale-105 duration-300">
+              <Rating
+                style={{ maxWidth: 150, marginBottom: 15 }}
+                value={review.rating}
+                readOnly
+              />
+              <p className="text-gray-600 mb-4">{review.details}</p>
+              <h3 className="text-xl text-orange-500 font-semibold">{review.name}</h3>
+            </div>
+          </SwiperSlide>
+        ))}
       </Swiper>
-    </>
-        </section>
-    );
+    </section>
+  );
 };
 
 export default Testimonials;
